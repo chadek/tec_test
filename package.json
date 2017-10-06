@@ -1,0 +1,23 @@
+{
+  "name": "tec_test",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "node ./auth.server.js",
+    "build": "node ./init/build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.1",
+    "express-jwt": "^5.3.0",
+    "mongoose": "^4.12.0"
+  },
+  "description": "Tec test for Y generation",
+  "main": "auth.server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chadek/tec_test"
+  },
+  "author": "Fabrice Meyer"
+}
