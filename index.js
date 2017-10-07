@@ -21,31 +21,6 @@ var app = express();
 
 
 
-<<<<<<< HEAD
-=======
-// watch output directories and update on new file
-fs.watch ( dirPath.out.mp4_1080p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-fs.watch ( dirPath.out.mp4_720p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-fs.watch ( dirPath.out.mp4_480p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-fs.watch ( dirPath.out.ogv_1080p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-fs.watch ( dirPath.out.ogv_720p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-fs.watch ( dirPath.out.ogv_480p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-
-
-
->>>>>>> fb92e731494a50d8bba47e779194bf4c5dc78497
 // setting views path and render engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -80,11 +55,6 @@ var storage = multer.diskStorage({
 // config multer middleware with storage configured previously
 var upload = multer({ storage: storage }).single('video');
 
-<<<<<<< HEAD
-=======
-// define upload file
-var uploadPath = "./input_mp4_1080p/";
->>>>>>> fb92e731494a50d8bba47e779194bf4c5dc78497
 
 /*------Route------*/
 
@@ -136,21 +106,10 @@ app.post('/upload/file', function(req, res) {
   if(req.user){
     var buffer = req.file
     upload(req, res, function(err) {
-    /*  data in res
-        fieldname: 'video',
-        originalname: 'back-end-test.mp4',
-        encoding: '7bit',
-        mimetype: 'video/mp4',
-        destination: './tmp/',
-        filename: 'video-1507369790225.mp4',
-        path: 'tmp/video-1507369790225.mp4',
-        size: 8876439*/
+
         console.log(req.file.path);
-<<<<<<< HEAD
+
         var filePath = dirPath.in.mp4_1080p+req.file.filename;
-=======
-        var filePath = uploadPath+req.file.filename;
->>>>>>> fb92e731494a50d8bba47e779194bf4c5dc78497
         mv(req.file.path, filePath, function(err){
           if (err) throw err;
           console.log("File succesfully moved to input_mp4_1080p creating links...");
