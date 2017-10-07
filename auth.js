@@ -15,12 +15,12 @@ var models = require('./model/models')(mongoose);
 
 // Passport session setup.
 passport.serializeUser(function(user, done) {
-  console.log("serializing " + user.user);
+  console.log("serializing " + user);
   done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
-  console.log("deserializing " + obj.user);
+  console.log("deserializing " + obj);
   done(null, obj);
 });
 
@@ -46,7 +46,7 @@ passport.use('local-signin', new LocalStrategy(
         console.log("USERNAME NOT FOUND:", username);
         //req.session.error = 'Could not log user in. Please try again.'; //inform user could not log them in
         //req.session.errorCause = 'badLog';
-        done(null, result);
+        done(null, result.email);
 
       } else {
         console.log("FOUND USER: " + result.email);
@@ -55,12 +55,12 @@ passport.use('local-signin', new LocalStrategy(
           console.log("LOGGED IN AS: " + result.email);
           //req.session.success = 'You are successfully logged in ' + resul.email + '!';
           // sending back user
-          done(null, result);
+          done(null, result.email);
         } else {
           console.log("AUTHENTICATION FAILED");
           //req.session.error = 'Could not log user in. Please try again.'; //inform user could not log them in
           //req.session.errorCause = 'badLog';
-          done(null, result);
+          done(null, result.email);
         }
       }
     });
