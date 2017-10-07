@@ -36,31 +36,26 @@ passport.use('local-signin', new LocalStrategy(
 
     console.log(username);
 
-    //connect to db
+    // look for the email
     models.Coach.findOne({email: username}, function(err, result) {
 
       console.log("USERNAME input :", username);
       if (err) throw err;
-      // if no match 
+      // if no match retrun false (auth fail)
       if (null == result) {
         console.log("USERNAME NOT FOUND:", username);
-        //req.session.error = 'Could not log user in. Please try again.'; //inform user could not log them in
-        //req.session.errorCause = 'badLog';
-        done(null, result.email);
+        done(null, false);
 
       } else {
         console.log("FOUND USER: " + result.email);
         // compare pwd to pwd store in db
         if (bcrypt.compareSync(password, result.password)){
           console.log("LOGGED IN AS: " + result.email);
-          //req.session.success = 'You are successfully logged in ' + resul.email + '!';
-          // sending back user
+          // sending back user mail as data for cookie (could be also id)
           done(null, result.email);
         } else {
           console.log("AUTHENTICATION FAILED");
-          //req.session.error = 'Could not log user in. Please try again.'; //inform user could not log them in
-          //req.session.errorCause = 'badLog';
-          done(null, result.email);
+          done(null, false);
         }
       }
     });

@@ -21,12 +21,14 @@ module.exports = function(mongoose) {
     try {
 	    models = {
 			Coach: mongoose.model('Coach'),
-			Candidate: mongoose.model('Candidate')
+			Candidate: mongoose.model('Candidate'),
+			File: mongoose.model('File')
 	    };
 	} catch (error) {
 		models = {
 			Coach: mongoose.model('Coach', coachSchema),
-			Candidate: mongoose.model('Candidate', candidateSchema)
+			Candidate: mongoose.model('Candidate', candidateSchema),
+			File: mongoose.model('File', fileSchema)
 	    };
 	}
     return models;

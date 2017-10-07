@@ -21,28 +21,6 @@ var app = express();
 
 
 
-// watch output directories and update on new file
-fs.watch ( dirPath.out.mp4_1080p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-fs.watch ( dirPath.out.mp4_720p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-fs.watch ( dirPath.out.mp4_480p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-fs.watch ( dirPath.out.ogv_1080p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-fs.watch ( dirPath.out.ogv_720p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-fs.watch ( dirPath.out.ogv_480p, function (e,f) {
-  console.log(`event type is: ` + e);
-});
-
-
-
 // setting views path and render engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -74,14 +52,14 @@ var storage = multer.diskStorage({
   }
 });
 
+// config multer middleware with storage configured previously
 var upload = multer({ storage: storage }).single('video');
 
-// define upload file
-var uploadPath = "./input_mp4_1080p/";
 
 /*------Route------*/
 
 //=====GET ROUTE===//
+// index route
 app.get('/', function(req, res, next) {
   if(req.user){
     res.send("Your are succesfully log in "+ req.user);
@@ -90,6 +68,7 @@ app.get('/', function(req, res, next) {
   }
 });
 
+// route to upload file form
 app.get('/upload', function(req, res, next) {
   if(req.user){
     res.render('upload', {user: req.user });
@@ -98,6 +77,7 @@ app.get('/upload', function(req, res, next) {
   }
 });
 
+// route to candidates list
 app.get('/candidates', function(req, res, next) {
   if(req.user){
     models.Candidate.find( function(err, result) {
@@ -111,7 +91,7 @@ app.get('/candidates', function(req, res, next) {
 });
 
 
-// logging out
+// route to log out
 app.get('/logout', function(req, res){
   console.log("LOGGIN OUT " + req.user);
   req.logout();
@@ -121,7 +101,7 @@ app.get('/logout', function(req, res){
 
 //=====POST ROUTE===//
 
-// upload file using multer
+// upload file using multer on post request
 app.post('/upload/file', function(req, res) {
   if(req.user){
     var buffer = req.file
@@ -136,7 +116,7 @@ app.post('/upload/file', function(req, res) {
         path: 'tmp/video-1507369790225.mp4',
         size: 8876439*/
         console.log(req.file.path);
-        var filePath = uploadPath+req.file.filename;
+        var filePath = dirPath.in.mp4_1080p+req.file.filename;
         mv(req.file.path, filePath, function(err){
           if (err) throw err;
           console.log("File succesfully moved to input_mp4_1080p creating links...");
@@ -158,7 +138,7 @@ app.post('/upload/file', function(req, res) {
 });
 
 
-/* connection */
+/* post request that trigger the local-signin auth process (see auth.js) */
 app.post('/authenticate', passport.authenticate('local-signin', { 
   successRedirect: '/upload',
   failureRedirect: '/'
