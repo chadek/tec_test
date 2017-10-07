@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Upload</title>
+  </head>
+  <body>
+    <a href="/upload">Go to upload page</a>
+    <a href="/logout">Logout</a>
+    <p>You are <%= user %> coach. Bellow is candidate list :</p>
+
+    <% candidates.forEach(function(data,index) {  %>
+      <p><%= data.surname %> <%= data.name %> </p>
+    <% }); %>
+  </body>
+</html> 
+
+  
