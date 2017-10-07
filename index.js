@@ -82,8 +82,21 @@ app.get('/candidates', function(req, res, next) {
   if(req.user){
     models.Candidate.find( function(err, result) {
       if (err) throw err;
-      console.log(result);
+      //console.log(result);
       res.render('candidates', {user: req.user, candidates: result });
+  });
+  } else{
+    res.redirect('/');
+  }
+});
+
+// route to files list
+app.get('/files', function(req, res, next) {
+  if(req.user){
+    models.File.find( function(err, result) {
+      if (err) throw err;
+      //console.log(result);
+      res.render('files', {user: req.user, files: result });
   });
   } else{
     res.redirect('/');

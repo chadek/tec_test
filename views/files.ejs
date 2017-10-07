@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Upload</title>
+  </head>
+  <body>
+    <a href="/upload">Go to upload page</a>
+    <a href="/logout">Logout</a>
+    <p>You are <%= user %> coach. Bellow is the list of file :</p>
+
+    <% files.forEach(function(data,index) {  %>
+      <p>Filename : <%= data.filename %>  Codec : <%= data.encoding %> Scale : <%= data.scale %>  Path: <%= data.path %></p>
+
+    <% }); %>
+  </body>
+</html> 
+
+  

@@ -5,7 +5,9 @@ readonly FORMAT="${2}"
 readonly SUFIXE_NAME=${CODEC}_${FORMAT}
 
 # get SCRIPT dir
-readonly DB_PATH="/home/fababy/tec_test/uploads"
+readonly SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+readonly DB_PATH="${SCRIPT_PATH}/../uploads"
 # build input and output path
 readonly INPUT_PATH=${DB_PATH}/input_${SUFIXE_NAME}     
 readonly OUTPUT_PATH=${DB_PATH}/output_${SUFIXE_NAME}     
@@ -14,9 +16,10 @@ readonly LOCK_FILENAME_PREFIXE=".ffmpeg_transcodage"
  
 readonly LOCKFILE_DIR=${INPUT_PATH}
 readonly LOCK_FD=200
-# location of ffmpeg bin
+
+# if not in path set ffmpeg bin location here
 readonly  ffmpeg="/home/fababy/.linuxbrew/bin/ffmpeg"
-readonly  mongoExec="/home/fababy/tec_test/uploads/dbUpdate.sh"
+readonly  mongoExec="${SCRIPT_PATH}/dbUpdate.sh"
 
 # lock function (prevent having 2 instance of this script running at the same time for given param) 
 lock() {
