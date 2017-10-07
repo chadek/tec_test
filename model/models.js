@@ -1,5 +1,6 @@
 //====Mongoose model==== 
 module.exports = function(mongoose) {
+
     var coachSchema = mongoose.Schema({
 	  email: String,
 	  password: String
@@ -8,11 +9,20 @@ module.exports = function(mongoose) {
 	  name: String,
 	  surname: String
 	});
-    // declare seat covers here too
-    var models = {
-		Coach: mongoose.model('Coach', coachSchema),
-		Candidate: mongoose.model('Candidate', candidateSchema)
-    };
+    
+    // try to get model, if doesn't exit then init with schema
+    let models 
+    try {
+	    models = {
+			Coach: mongoose.model('Coach'),
+			Candidate: mongoose.model('Candidate')
+	    };
+	} catch (error) {
+		models = {
+			Coach: mongoose.model('Coach', coachSchema),
+			Candidate: mongoose.model('Candidate', candidateSchema)
+	    };
+	}
     return models;
 }
 

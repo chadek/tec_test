@@ -1,5 +1,6 @@
 // init application by seedind coach and candidate data to bd
 
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
 // connecting to db
@@ -16,7 +17,9 @@ var models = require('../model/models')(mongoose);
 
 // filling database with coaches data
 coachSeed.forEach( function(data,index) {
-	var coach = new models.Coach({ email: data.email, password: data.password});
+	// hash password before storage in db
+	pwdHash = bcrypt.hashSync(data.password, bcrypt.genSaltSync(10));
+	var coach = new models.Coach({ email: data.email, password: pwdHash });
 	coach.save(function(err, result) {
 		if (err) throw err;
 		console.log("COACH CREATED : ", data.email);
@@ -32,12 +35,12 @@ candidateSeed.forEach( function(data,index) {
 	}); 
 });
 
-// print coaches stored in database
+// print coaches stored in database for debug
 models.Coach.find(function(err, result) {
 	if (err) throw err;
 	console.log(result);
 });
-// print candidates stored in database
+// print candidates stored in database for debug
 models.Candidate.find(function(err, result) {
 	if (err) throw err;
 	console.log(result);
