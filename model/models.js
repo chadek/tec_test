@@ -9,7 +9,13 @@ module.exports = function(mongoose) {
 	  name: String,
 	  surname: String
 	});
-    
+
+	var fileSchema = mongoose.Schema({
+		filename: String,
+		path: String,
+		encoding: String,
+		scale: String
+	});  
     // try to get model, if doesn't exit then init with schema
     let models 
     try {
