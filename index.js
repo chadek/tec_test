@@ -149,7 +149,7 @@ app.post('/authenticate', passport.authenticate('local-signin', {
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
-  next(err);
+  res.send("Error 404 file not found...")
 });
 
 // start app on port 3000
