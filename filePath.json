@@ -1,0 +1,30 @@
+{
+  "in":{
+	  "mp4_1080p" : "./uploads/input_mp4_1080p/",
+	  "mp4_720p" : "./uploads/input_mp4_720p/",
+	  "mp4_480p" : "./uploads/input_mp4_480p/",
+	  "ogv_1080p" : "./uploads/input_ogv_1080p/",
+	  "ogv_720p" : "./uploads/input_ogv_720p/",
+	  "ogv_480p" : "./uploads/input_ogv_480p/",
+	  "mp4_1080p" : "./uploads/input_mp4_1080p/",
+	  "mp4_720p" : "./uploads/input_mp4_720p/",
+	  "mp4_480p" : "./uploads/input_mp4_480p/",
+	  "ogv_1080p" : "./uploads/input_ogv_1080p/",
+	  "ogv_720p" : "./uploads/input_ogv_720p/",
+	  "ogv_480p" : "./uploads/input_ogv_480p/"
+  },
+  "out":{
+    "mp4_1080p" : "./uploads/output_mp4_1080p/",
+	  "mp4_720p" : "./uploads/output_mp4_720p/",
+	  "mp4_480p" : "./uploads/output_mp4_480p/",
+	  "ogv_1080p" : "./uploads/output_ogv_1080p/",
+	  "ogv_720p" : "./uploads/output_ogv_720p/",
+	  "ogv_480p" : "./uploads/output_ogv_480p/",
+	  "mp4_1080p" : "./uploads/output_mp4_1080p/",
+	  "mp4_720p" : "./uploads/output_mp4_720p/",
+	  "mp4_480p" : "./uploads/output_mp4_480p/",
+	  "ogv_1080p" : "./uploads/output_ogv_1080p/",
+	  "ogv_720p" : "./uploads/output_ogv_720p/",
+	  "ogv_480p" : "./uploads/output_ogv_480p/"
+  }
+}
