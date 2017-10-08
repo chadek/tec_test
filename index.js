@@ -121,7 +121,7 @@ app.post('/upload/file', upload.single('video'), function(req, res) {
       console.log("No file sent");
       res.send(" Please choose a file before sending");
     } else {
-      console.log(req.file);
+      //console.log(req.file);
 
       var filePath = dirPath.in.mp4_1080p+req.file.filename;
       mv(req.file.path, filePath, function(err){

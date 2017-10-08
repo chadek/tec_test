@@ -29,7 +29,7 @@ passport.use('local-signin', new LocalStrategy(
   //{ passReqToCallback : true }, //allows us to pass back the request to the callback
   function(username, password, done) {
 
-    console.log(password);
+    
     // prevent noSQL injection
     username = sanitize(username);
     password = sanitize(password);
