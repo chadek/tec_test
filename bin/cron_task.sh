@@ -18,7 +18,7 @@ readonly LOCKFILE_DIR=${INPUT_PATH}
 readonly LOCK_FD=200
 
 # if not in path set ffmpeg bin location here
-readonly  ffmpeg="/home/fababy/.linuxbrew/bin/ffmpeg"
+readonly  ffmpeg="ffmpeg"
 readonly  mongoExec="${SCRIPT_PATH}/dbUpdate.sh"
 
 # lock function (prevent having 2 instance of this script running at the same time for given param) 

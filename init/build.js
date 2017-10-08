@@ -22,7 +22,7 @@ coachSeed.forEach( function(data,index) {
 	var coach = new models.Coach({ email: data.email, password: pwdHash });
 	coach.save(function(err, result) {
 		if (err) throw err;
-		console.log("COACH CREATED : ", data.email);
+		console.log("COACH CREATED : " + data.email +" password : "+ data.password);
 	}); 
 });
 
@@ -38,12 +38,12 @@ candidateSeed.forEach( function(data,index) {
 // print coaches stored in database for debug
 models.Coach.find(function(err, result) {
 	if (err) throw err;
-	console.log(result);
+	//console.log(result);
 });
 // print candidates stored in database for debug
 models.Candidate.find(function(err, result) {
 	if (err) throw err;
-	console.log(result);
+	//console.log(result);
 });
 
 mongoose.connection.close();

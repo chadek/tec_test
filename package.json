@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "node index.js",
+    "prebuild": "./init/init_dir.sh",
     "build": "node ./init/build.js",
     "cron": "./bin/cron_like.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
