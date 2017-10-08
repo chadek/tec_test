@@ -116,28 +116,32 @@ app.get('/logout', function(req, res){
 
 // upload file using multer on post request
 app.post('/upload/file', upload.single('video'), function(req, res) {
+  if(req.user){
+    if (req.file == undefined){
+      console.log("No file sent");
+      res.send(" Please choose a file before sending");
+    } else {
+      console.log(req.file);
 
-        if (req.file == undefined){
-          console.log("No file sent");
-          res.send(" Please choose a file before sending");
-        } else {
-          console.log(req.file);
+      var filePath = dirPath.in.mp4_1080p+req.file.filename;
+      mv(req.file.path, filePath, function(err){
+        if (err) throw err;
+        console.log("File succesfully moved to input_mp4_1080p creating links...");
+        console.log(filePath);
+        console.log(filePath.mp4_720p+req.file.filename);
+        fs.link(filePath, dirPath.in.mp4_720p+req.file.filename, function(){console.log("Linked mp4_720")});
+        fs.link(filePath, dirPath.in.mp4_480p+req.file.filename, function(){console.log("Linked mp4_480")});
+        fs.link(filePath, dirPath.in.ogv_1080p+req.file.filename, function(){console.log("Linked ogv_1080")});
+        fs.link(filePath, dirPath.in.ogv_720p+req.file.filename, function(){console.log("Linked ogv_720")});
+        fs.link(filePath, dirPath.in.ogv_480p+req.file.filename, function(){console.log("Linked ogv_480")});
+      });
 
-          var filePath = dirPath.in.mp4_1080p+req.file.filename;
-          mv(req.file.path, filePath, function(err){
-            if (err) throw err;
-            console.log("File succesfully moved to input_mp4_1080p creating links...");
-            console.log(filePath);
-            console.log(filePath.mp4_720p+req.file.filename);
-            fs.link(filePath, dirPath.in.mp4_720p+req.file.filename, function(){console.log("Linked mp4_720")});
-            fs.link(filePath, dirPath.in.mp4_480p+req.file.filename, function(){console.log("Linked mp4_480")});
-            fs.link(filePath, dirPath.in.ogv_1080p+req.file.filename, function(){console.log("Linked ogv_1080")});
-            fs.link(filePath, dirPath.in.ogv_720p+req.file.filename, function(){console.log("Linked ogv_720")});
-            fs.link(filePath, dirPath.in.ogv_480p+req.file.filename, function(){console.log("Linked ogv_480")});
-          });
+      res.end('File is uploaded');
+    }
+  } else {
+    res.redirect('/');
+  }
 
-          res.end('File is uploaded');
-        }
   
 });
 
