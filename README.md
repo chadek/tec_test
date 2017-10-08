@@ -1,16 +1,24 @@
 # Tec_Test project
 
-Technical test for Y Generation interview. This project consist in a web app that you can log in with email and password to then upload file or looking for data store in the database.
+Technical test for Y Generation interview. This project consist in a web app that you can log in with email and password to then upload file or looking for data stored in the database.
 
-Database data are provided by seeds store in JSON files. Those data are sent during building process.
+Database data are provided by seeds stored in JSON files. Those data are sent during building process.
 
-When a user upload a video, it is stored in a tmp directory then sent to a working environnement file as input. This mp4 video is then converted to ogv format and rezised using ffmpeg tool in a bash script 
+When a user uploads a mp4 video, the video is stored in a tmp directory then sent to a mailbox directory as input. This mp4 video is then converted to ogv format and is resized in different scale format using ffmpeg tool. Converting is done in a standalone process using bash scripts
 
 ## Installation
 
 ### Requirement:
 
-Note that all following commands are for on ubuntu distribution
+1. nodejs
+2. npm
+3. mongoDB
+
+Optional : ffmpeg
+
+### Procedure:
+
+Note that all following commands are for ubuntu distribution
 
 **Install nodejs 6.X** :
 
@@ -22,9 +30,9 @@ Note that all following commands are for on ubuntu distribution
 	sudo apt-get install -y npm
 	sudo npm install -g npm
 
-**Install MongoDB** referring to : https://docs.mongodb.com/manual/administration/install-community/
+**Install MongoDB** referring to: https://docs.mongodb.com/manual/administration/install-community/
 
-In this case I followed those instructions : https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+In this case I followed those instructions: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 	
 	sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
 	echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
@@ -37,85 +45,89 @@ Then start service using:
 
 	sudo service mongodb start
 
-After mongoDB installation and service start, run **"mongo"** command and you should see **"connecting to: mongodb://127.0.0.1:27017"** if it's working properly
+After mongoDB installation and service started, verify that service is running by running **"mongo"** command and you should see **"connecting to: mongodb://127.0.0.1:27017"** if it's working properly. 
 
     Clone this git repository and dowload dependencies by running "npm install" in the project folder 
 
+### Optionnal:
 
-Video treatment depends on ffmpeg tool. Installing it with right codecs is a bit tricky so I added a static build of it into this project (locate in /bin).
+Video treatments are done with ffmpeg tool. Installing it with right codecs is a bit tricky so I added a static build of it into this project (locate in /bin).
 
-To get the original version : wget http://ffmpeg.gusari.org/static/64bit/ffmpeg.static.64bit.latest.tar.gz
+To get the original version: wget http://ffmpeg.gusari.org/static/64bit/ffmpeg.static.64bit.latest.tar.gz
 
 To know more about how I proceed, refer to this link : https://buzut.fr/installer-ffmpeg-et-encoder-pour-html5/
-You can also build from source but it's pain or use brew to install it but brew comes with a lot of (useless) librairies and tools 
+You can also build ffmpeg from source but it's pain or use brew to install it but brew comes with a lot of (useless) librairies and tools.
 
-If you want to use your own ffmpeg bin edit /bin/cron_task.sh and set the path to your ffmpeg bin in ffmpeg variable (line 21) 
+If you want to use your own ffmpeg bin edit /bin/cron_task.sh and set the path to your ffmpeg bin in ffmpeg variable (line 21).
 
-ffmpeg install build sources : http://wiki.razuna.com/display/ecp/FFmpeg+Installation+for+Ubuntu
+ffmpeg install build sources: http://wiki.razuna.com/display/ecp/FFmpeg+Installation+for+Ubuntu
 
 
 
-## Structure and app description
+## App description
 
 ### App content 
 
-**Templates** are define in **views** folder and rendered with the ejs engine.
+**Templates** are defined in **views** folder and rendered with the ejs engine.
 
-**Init** folder contains a js script and json files to seed db with data. It also contain a bash script that create a tmp folder and mailbox folders for video treatment process (including a cron_log folder used to save log from cron_task.sh). JS and Bash script are both called by **"npm run build"**
+**Init** folder contains a js script and json files to seed db with data. It also contains a bash script that create a tmp folder and mailbox folders for video treatment processes (including a cron_log folder used to save log from cron_task.sh). JS and Bash script are both called by **"npm run build"**.
 
-**Model** folder contains mongoose model data structure use by the app
+**Model** folder contains mongoose model data structures used by the app.
 
-**bin** contains bash scripts and ffmpeg bin. **cron_like.sh** is triggered by **"npm run cron"** and act as a cron task (call video treatment process every 5 minutes)
+**bin** contains bash scripts and ffmpeg bin. **cron_like.sh** is triggered by **"npm run cron"** and act as a cron task (call video treatment process every 5 minutes).
 
-**root** contains package.json the main program (index.js) and some data/functions used by index.js  
+**root** contains package.json the main program (index.js) and some data/functions used by index.js.  
 
 
-### Authenication
+### Authentication
 
 User must be logged to access restricted routes (example of user in db : email : test@chance.co pwd : password).
 
-Authentication is handle by **passport** module. Auth strategy is define in **auth.js**. If user is succesfully authenticate passport send a **cookie** to user. Accessing restricted part of this app is done by checking user cookie in routes
+Authentication is handle by **passport** module. Auth strategy is defined in **auth.js**. If user is successfully authenticated, passport send a **cookie** to user. Accessing restricted part of this app is done by checking user's cookie in routes.
 
 ### Main
 
-The main app runs in **index.js** using **express** framework. It sets all settings and handle routes return renderred templates.
+The main app runs in **index.js** using **express** framework. It sets all settings, handles routes and return rendered templates.
 
-It query database for /candidates and /files route
+It query database before renderring /candidates and /files.
 
-On /upload/file post request, it saves the incoming file in a **tmp** directory before moving it to **uploads/input_mp4_1080p**. Then a **link** is created to other input folders.
+On /upload/file post request, it saves the incoming file in a **tmp** directory before moving it to **uploads/input_mp4_1080p**. Then **links** are created to other input folders.
 
 ### Video treatment and bash stuff
 
-Video treatment is handled by a bash script. How does it working ?
+Video treatment is handled by a bash script. How does it work ?
 
-Uploads folder contains a set of mailbox linked to a specifique codec and scale.
-**cron_like.sh** will call a process to check those mailboxes. If mailboxes aren't empty, it will **start converting the video** and store results in output mailboxes. When converting is done, the **input file is removed** and the **database is updated with metadata**. There is physially one incoming video into the **input_mp4_1080p mailbox** wich is **linked** to the others mailboxes to trigger treatment on next mailbox check.
+Uploads folder contains a set of mailboxes. Each mailbox is use for one type of video conversion (codec and scale).
+**cron_like.sh** will call a process to check those mailboxes. If mailboxes are not empty, it will **start converting the video** and store results in output mailboxes. When converting is done, the **input file is removed** and the **database is updated with metadata**. There is physically one incoming video into the **input_mp4_1080p mailbox** which is **linked** to the others mailboxes. A file in folder is the trigger for processing on next mailbox check.
 
-**bin/cron_task.sh** perform a video convertion to output directory for given format and scale. Then it remove input file
+**bin/cron_task.sh** performs a video conversion to output directory for given format and scale. Then it removes input file.
 
-**bin/dbUpdate.sh** is call in cron_task to update database with metadata after conversion using mongo comand
+**bin/dbUpdate.sh** is called in **cron_task.sh** to update database with metadata after conversion using mongo command.
 
-**bin/cron_like.sh** act as a cron task : it is an infinite loop calling cron_task for all video format and scale every 5 minutes
+**bin/cron_like.sh** acts as a cron task: it is an infinite loop calling **cron_task.sh** for all videos formats and scales every 5 minutes.
 
-After running video treatment all videos should be in **output_CODEC_SCALE** folders none should be found in **input_CODEC_SCALE**
+After running video treatment, all videos should be in **output_CODEC_SCALE** folders. No one should be found in **input_CODEC_SCALE**.
 
 
 
 ## Usage
 
-After installing nodejs npm and mongodb to **start the app** use the following commands :
+Prepare context (to do only once):
 
 	npm install
 	npm run build
+
+To **start app** use the following commands:
+
 	npm start
 
-You should be able to access the app with this url : http://localhost:3000
+You should be able to access the app with this url: http://localhost:3000
 
-To **run the cron like video treatment** process use (doesn't work if it's run before building) :
+To **run the cron like video treatment** process use:
 
 	npm run cron
 
-MongoDB is accessible on port 27017. You can lookup for data store in database using mongo command. Some usefull command to query database  :
+MongoDB is accessible on port 27017. You can view the database's data using mongo command. Some useful commands to query database:
 
     use tec_test
     db.createCollection("collectionName")
@@ -125,9 +137,9 @@ MongoDB is accessible on port 27017. You can lookup for data store in database u
 
 ## Test
 
-Test made to ensure the app respond well :
+Tests made to ensure the app responds well:
 
-### route testing
+### Request testing
 
 	Handle unknown routes
 	No data in post request
@@ -135,19 +147,19 @@ Test made to ensure the app respond well :
 	only MP4 file allow in form
 	file upload post from an unlogged user
 	upload sample video 
-	uploading big file (1G) => work but system got really slow while uploading 
+	uploading big file (1G) => work but system got considerably slow while uploading 
 
 Limitation : 
 
 Uploading big files slow considerably the system (maybe need to stream the file to not run out of ram)
 
-Working over http, cookie could be intercept. Can be easily fixed by using https connection 
+Working over http, cookies could be intercepted. Can be easily fixed by using https connection. 
 
-File isn't checked at serverside (user could send other file than mp4 by forging post request or send a random file with mp4 extension). Can be fixed buy checking file signature (magic number)
+File is not checked at server side (user could send other file than mp4 by forging post request or send a random file with mp4 extension). Can be fixed buy checking file signature (magic number)
 
-### video treatment
+### Video treatment
 
-As video treatment process is standalone, test were made separeatly before integration to web app
+As video treatment process is standalone, test were made separatly before integration to web app
 
 	handle several file in the same input mailbox directory
 	lock mecanism to prevent several instance running at same time
@@ -160,18 +172,17 @@ Limitation :
 No link between metadata stored in database and files actually in fs. Consequences : 
 	
 	If an output file is removed, metadata are still in database. 
-    If video treatment run while database isn't accessible, generated metadata won't be store in db
+    If a video treatment runs while database is not accessible, generated metadata won't be stored in db
 
-This can be fixed buy writing a bilateral consistancy check (check wich file are in fs and compare with db) 
+This can be fixed buy writing a bilateral consistency check (check which files are in fs and compare with db) 
 
-### Deployement
+### Deployment
 
-	Following the install procedure described before (do make sure it's doable, easy and to change context)
+	Following the installation procedure described before (make sure it's doable, easy and to change context)
 
 Limitation :
 
-Video treatment depend on bash script wich won't work on window's system and maybe not on every Unix system 
-
+Video treatments depend on bash script which won't work on window's system and maybe not on every Unix system.
 
 ## Contributing
 
@@ -183,4 +194,4 @@ Video treatment depend on bash script wich won't work on window's system and may
 
 ## Credit
 
-I dedicate this credit to JsonWebToken wich made me loose almost an entire day trying to understand how it is working and particurlarly how to handle them clienside (thing that I steal didn't figured out).	
+I dedicate this credit to JsonWebToken which made me loose almost an entire day trying to understand how it is working and particularly how to handle them clien side (thing that I steel didn't figure out).	
