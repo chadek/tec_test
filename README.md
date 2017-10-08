@@ -11,29 +11,30 @@ Requirement:
 
 Note that all following commands are for on ubuntu distribution
 
-    *Install nodejs 6.X :
-
+    Install nodejs 6.X :
     	curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-	
 		sudo apt-get install -y nodejs 
     
-    *Install Node Packaged Module (npm) then update it (may need to call npm install twice) : 
-
+    Install Node Packaged Module (npm) then update it (may need to call npm install twice) : 
     	sudo apt-get install -y npm
-
     	sudo npm install -g npm
 
-    *Install MongoDB referring to : https://docs.mongodb.com/manual/administration/install-community/
+    Install MongoDB referring to : https://docs.mongodb.com/manual/administration/install-community/
 
-		In this case I followed those instructions : https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+In this case I followed those instructions : https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+	
+	sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
+	echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
+	sudo apt-get update
+	sudo apt-get install -y mongodb-org
 
-		After mongodb installation, do not forget to start mongod service : sudo service mongodb start
+After mongodb installation, do not forget to start mongod service : sudo service mongodb start
 
-		By running this command you may have a "Failed to start mongodb.service" issue. To deal with it, add a /etc/systemd/system/mongodb.service file and fill it with content acording to this post : https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-16-04
+By running this command you may have a "Failed to start mongodb.service" issue. To deal with it, add a /etc/systemd/system/mongodb.service file and fill it with content acording to this post : https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-16-04
 
-		After mongoDB installation and service start, run "mongo" command and you should see "connecting to: mongodb://127.0.0.1:27017" if it's working properly
+After mongoDB installation and service start, run "mongo" command and you should see "connecting to: mongodb://127.0.0.1:27017" if it's working properly
 
-    *Clone this git and dowload dependencies by running "npm install" in the project folder 
+    Clone this git and dowload dependencies by running "npm install" in the project folder 
 
 
 Video treatment depend on ffmpeg tool. Installing it with right codecs is a bit tricky so I added a static build of it into this project (locate in /bin).
@@ -82,7 +83,7 @@ On /upload/file post route, it save the incoming file in a tmp directory before 
 
 Video treatment is handle by a bash script.
 
-bin/cron_task.sh perform a video convertion for a given format and scale to output file path then remove input file
+bin/cron_task.sh perform a video convertion for a given format and scale to output directory then remove input file
 
 bin/dbUpdate.sh is call in cron_task to update database with metadata after conversion using mongo cmd
 
@@ -96,38 +97,39 @@ After running video treatment all videos should be in output_CODEC_SCALE folders
 
 After installing nodejs npm and mongodb to start the app use the following commands :
 
-	*npm install
-	*npm run build
-	*npm start
+	npm install
+	npm run build
+	npm start
 
 You should be able to access the app with this url : http://localhost:3000
 
-To run the cron like video treatment process use :
+To run the cron like video treatment process use (doesn't work if it's run before building) :
 
-	*npm run cron
+	npm run cron
 
 MongoDB is accessible on port 27017. You can lookup for data store in database using mongo command. Some usefull command to query database  :
 
-    *use tec_test
-    *db.createCollection("collectionName")
-    *db.coaches.insert({ email: "someValue", password: "13566" })
-    *db.coaches.find().pretty()
+    use tec_test
+    db.createCollection("collectionName")
+    db.coaches.insert({ email: "someValue", password: "13566" })
+    db.coaches.find().pretty()
 
 
 ## Test
 
 I ran several test to ensure the app respond well :
 
-	*route testing
+	route testing
 
-	** Unknown routes
-	** no data in post request
-	** wrong user entry or missing fields
-	** file upload post from an unlogged user 
+		Unknown routes
+		no data in post request
+		wrong user entry or missing fields
+		file upload post from an unlogged user 
 
-	*video test
+	video treatment
+		
 
-	 
+
 
 
 ## Contributing
