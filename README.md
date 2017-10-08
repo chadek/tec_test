@@ -1,6 +1,8 @@
-# ${1:Project Name}
+# Tec_Test project
 Technical test for Y Generation interview. This project consist in a web app that you can log in with email and password to then upload file or looking for data store in the database.
+
 Database data are provided by seeds store in JSON files. Those data are sent during building process.
+
 When a user upload a video, it is stored in a tmp directory then sent to a working environnement file as input. This mp4 video is then converted to ogv format and rezised using ffmpeg tool in a bash script 
 ## Installation
 Requirement:
@@ -43,7 +45,7 @@ MongoDB is accessible on port 27017. You can lookup for data store in database u
     *db.coaches.insert({ email: "someValue", password: "13566" })
     *db.coaches.find().pretty()
 
-    
+
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
